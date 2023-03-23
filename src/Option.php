@@ -19,7 +19,7 @@ class Option
 
     protected string $bin = 'php';
 
-    protected string $command = 'vendor/hyperf/watcher/watcher.php start';
+    protected string $command = 'vendor/crayxn/hyperf-watcher/watcher.php start';
 
     /**
      * @var string[]
