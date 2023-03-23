@@ -54,7 +54,8 @@ class Process
         }
         $class = $meta->toClassName();
         $collectors = $this->config->getCollectors();
-        [$data, $proxies, $aspectClasses] = file_exists($this->path) ? unserialize(file_get_contents($this->path)) : [[], [], []];
+        $content = file_exists($this->path) ? unserialize(file_get_contents($this->path)) : [[], []];
+        [$data, $proxies] = $content;
         foreach ($data as $collector => $deserialized) {
             /** @var MetadataCollector $collector */
             if (in_array($collector, $collectors)) {
@@ -82,12 +83,15 @@ class Process
 
         $composerLoader = Composer::getLoader();
         $composerLoader->addClassMap($this->config->getClassMap());
-        $this->deleteAspectClasses($aspectClasses, $proxies, $class);
+
+        if(isset($content[2])){
+            $this->deleteAspectClasses($content[2], $proxies, $class);
+        }
 
         // Reload the proxy class.
         $manager = new ProxyManager(array_merge($composerLoader->getClassMap(), $proxies, [$class => $this->file]), BASE_PATH . '/runtime/container/proxy/');
         $proxies = $manager->getProxies();
-        $aspectClasses = $manager->getAspectClasses();
+        $aspectClasses = method_exists($manager, 'getAspectClasses') ? $manager->getAspectClasses() : [];
 
         $this->putCache($this->path, serialize([$data, $proxies, $aspectClasses]));
     }
@@ -159,6 +163,7 @@ class Process
 
     protected function deleteAspectClasses($aspectClasses, $proxies, $class): void
     {
+        if(!$aspectClasses) return;
         foreach ($aspectClasses as $aspect => $classes) {
             if ($aspect !== $class) {
                 continue;
