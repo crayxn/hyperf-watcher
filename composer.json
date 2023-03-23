@@ -1,12 +1,12 @@
 {
-    "name": "hyperf/watcher",
+    "name": "crayxn/hyperf-watcher",
     "type": "library",
     "license": "MIT",
     "keywords": [
         "php",
         "hyperf"
     ],
-    "description": "Hot reload watcher for Hyperf",
+    "description": "Hot reload watcher for Hyperf. see hyperf/watcher",
     "require": {
         "php": ">=8.0",
         "ext-posix": "*",
