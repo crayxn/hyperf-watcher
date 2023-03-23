@@ -70,7 +70,7 @@ class Watcher
                     $this->restart(false);
                 }
             } else {
-                $ret = exec(sprintf('%s %s/vendor/hyperf/watcher/collector-reload.php %s', $this->option->getBin(), BASE_PATH, $file));
+                $ret = exec(sprintf('%s %s/vendor/crayxn/hyperf-watcher/collector-reload.php %s', $this->option->getBin(), BASE_PATH, $file));
                 if ($ret['code'] === 0) {
                     $this->output->writeln('Class reload success.');
                 } else {
